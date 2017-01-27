@@ -1,1 +1,1 @@
-# scripts wrote while learning go programming language
+# scripts written while learning the go programming language
