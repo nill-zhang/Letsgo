@@ -19,5 +19,9 @@ func main(){
     x:=100.2323
     fmt.Println(x)
 
-   
+    j:="my name is sfzhang"
+    fmt.Println(j)
+
+    var salary,emploeeid string = "$5,000", "10010"
+    fmt.Println(salary,emploeeid)   
 }
