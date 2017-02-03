@@ -1,12 +1,14 @@
 package main
 
-import "fmt"
+import ("fmt"; "unsafe")
 
 type employee struct {
 	id, name, address string
 
 	salary float32
 }
+
+type Myint int32
 
 func main() {
 
@@ -29,4 +31,9 @@ func main() {
 
 		fmt.Println(ep2.name, "is rich")
 	}
+
+	var  t Myint  = Myint(5)
+	fmt.Println(t)
+	fmt.Printf("type: %T\n",t)
+	fmt.Println("size: ", unsafe.Sizeof(t))
 }
