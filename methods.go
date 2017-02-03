@@ -98,7 +98,9 @@ func (v Vertex) Scale_copied_argu(t int32){
 // whatever you do with the receiver and arguments within the method will not affect
 // the original, because methods get a copied version, use pointers can save memory
 // usually methods use pointers because they need to change the receiver's state or inner
-// data
+// data and even though like Abs function, it doesn't change the receiver's original data
+// it is better to still use the pointer receiver because we don't need to copy the
+// whole struct data if it is very big
 //
 //[2].
 // Did you notice that it doesn't matter whatever receiver you pass to the method(Scale_xxx)
