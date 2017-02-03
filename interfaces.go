@@ -103,9 +103,25 @@ func main() {
 	r = "awesome go"
 	fmt.Printf("%v----%T\n", r, r)
 
+//================================================================================
+	var o I = T{"concurrent"}
+	value1, status1 := o.(T)
+	if status1 == true {
+		fmt.Printf("o has concrete type %T\n", value1)
+	} else{
+		fmt.Printf("o does not have concrete type T\n")
+	}
 
+	var q interface{} = "test"
+	value2, status2 := q.(string)
+	if status2 == true {
+		fmt.Printf("q has concrete type %T\n",value2)
+	} else{
+		fmt.Printf("q does not have concrete type string\n")
+	}
 
-
+	//value3 := q.(float64)
+	//fmt.Println(value3)
 
 
 
