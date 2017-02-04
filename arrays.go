@@ -33,4 +33,16 @@ func main() {
 
 	fmt.Println("2 dimentional dArray:", twodarray)
 
+	double_array1 := [2][4]int {[4]int{1,2,3,4}, [4]int{5,6,7,8}}
+	double_array2 := [2][4]int {[...]int{1,2,3,4}, [...]int{5,6,7,8}}
+	double_array3 := [2][4]int {{1,2,3,4}, {5,6,7,8}}
+	// for two arrays to be considered the same, they must have the same length
+	// and elements type, [9]int != [10]int, once an array has been defined
+	// you can not expand or shrink the its size
+	if (double_array1 == double_array2) && (double_array2 == double_array3){
+
+		println("yes, they are all the same")
+	}
+
+
 }
