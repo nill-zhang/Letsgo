@@ -8,7 +8,31 @@ type employee struct {
 	salary float32
 }
 
+// Myint is just an alias for int32
 type Myint int32
+
+
+
+type Skills []string
+type Human struct {
+    	name string
+    	age int
+    	weight int
+}
+
+// When an anonymous field is a struct its fields are inserted
+// (embedded) into the struct containing it
+type Student struct {
+    	//an anonymous field of type Human(no field name)
+    	Human
+	speciality string
+	Skills //anonymous field for his skills
+        int //we will use this int as an anonymous field for his preferred number
+}
+
+func (h *Human) SayHi() {
+    fmt.Printf("Hi, I am %s, I am %v years-old\n", h.name, h.age)
+}
 
 func main() {
 
@@ -36,4 +60,24 @@ func main() {
 	fmt.Println(t)
 	fmt.Printf("type: %T\n",t)
 	fmt.Println("size: ", unsafe.Sizeof(t))
+
+
+
+	John := Student{Human:Human{"Mark", 25, 120},speciality:"Computer Science"}
+	fmt.Printf("%v---%v---%v---%v\n",John.age, John.name, John.speciality,John.weight)
+	// an anonymous field can be used with its type as its name!
+	John.Human = Human{"Shaofeng", 31, 143}
+	fmt.Printf("%v---%v---%v---%v\n",John.age, John.name, John.speciality,John.weight)
+	fmt.Printf("%v---%v---%v---%v\n",John.Human.age, John.Human.name,
+		                         John.speciality,John.Human.weight)
+	John.Skills = []string{"C++", "Python", "Golang"}
+	John.int =2222
+	fmt.Printf("%v---%v\n",John.Skills, John.int)
+
+	// If an anonymous field implements a given method, this method will be available
+	// for the type that is using this anonymous field.
+	John.SayHi()
+
+
+
 }
