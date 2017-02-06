@@ -29,7 +29,7 @@ func main() {
 
 /*
 a,b func has its own sum which is inherited from where they were defined
-their sum is independant of each other, and are attached to each function
+their sum is independent of each other, and are attached to each function
 
 
 results:
@@ -44,5 +44,4 @@ results:
 28 ----- 140
 36 ----- 204
 45 ----- 285
-
 */

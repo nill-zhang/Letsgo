@@ -9,6 +9,7 @@ func main() {
 	array[1] = 8
 	fmt.Println("array", array)
 
+	// I can also use b:=[...]string{"H","e","l","l","o"}
 	b := [5]string{"H", "e", "l", "l", "o"}
 
 	for i := 0; i < len(b); i++ {
@@ -38,7 +39,7 @@ func main() {
 	double_array3 := [2][4]int {{1,2,3,4}, {5,6,7,8}}
 	// for two arrays to be considered the same, they must have the same length
 	// and elements type, [9]int != [10]int, once an array has been defined
-	// you can not expand or shrink the its size
+	// you can not expand or shrink its size
 	if (double_array1 == double_array2) && (double_array2 == double_array3){
 
 		println("yes, they are all the same")

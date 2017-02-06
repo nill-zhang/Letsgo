@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 
@@ -31,14 +33,14 @@ func main() {
 	b := []string{"alex", "helen", "nova"}
 	c := []string{}
 	//c is empty and has zero elements
-	//copy basiclly is copy c = b[:len(c)]
+	//copy basically is the same as c = b[:len(c)]
 	copy(c, b)
 	fmt.Println("copy of b:", c)
 
 	c = b[:len(c)]
 	fmt.Println("slicing of b == equivalent of copy", c)
 
-	//two-dimentional slice with variable-inner
+	//two-dimensional slice with variable-inner length
 	d := make([][]int, 3)
 
 	for i := 0; i < 3; i++ {
@@ -57,7 +59,7 @@ func main() {
 
 	fmt.Println("two dimentinal slice with variable inner length", d)
 	fmt.Println("len(d):", d)
-	//can not do the folloing initiation
+	//can not do the following initiation
 	//x := []byte{"a", "b", "c"}
 	x := []byte("abc")
 	fmt.Println("bytes array:", x)
@@ -65,9 +67,9 @@ func main() {
 	y := string(x)
 	fmt.Println("convert bytest array to string:", y)
 
-	u := "good"
+	u := "你好吗abc"
 	v := []rune(u)
-	fmt.Println("rune slice(convert stirng to character slice):", v)
+	fmt.Println("rune slice(convert string to character slice):", v)
 	v[0] = 69
 	w := string(v)
 	fmt.Println("convert rune slice back to string:", w)
@@ -77,5 +79,32 @@ func main() {
 	//this will copy the corresponding values to the target slice
 	copy(slice2, slice1)
 	fmt.Println("slice2:", slice2)
+
+//=======================================================================
+
+	// Declare an array of 10 bytes (ASCII characters). Remember: byte is uint8.
+	var array [10]byte =[...]byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'}
+	//var array [...]byte =[...]byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'}
+
+	// Declare a and b as slice of bytes
+	var a_slice, b_slice []byte
+
+	// Make the slice "a_slice" refer to a "portion" of "array".
+	a_slice = array[2:5]
+	// a_slice is now a portion of array that contains: array[2], array[3] and array[4]
+
+	// Make the slice "b_slice" refer to another "portion" of "array".
+	b_slice = a_slice[1:]
+	// b_slice is now a portion of array that contains: array[3], array[4]
+	// pay attention to the capacity
+        fmt.Printf("%p, cap: %v\n", &array[3], cap(array))
+	fmt.Printf("%p, cap: %v\n", &a_slice[1],cap(a_slice))
+	fmt.Printf("%p, cap: %v\n", &b_slice[0], cap(b_slice))
+
+	a_slice = a_slice[1:]
+	//notice that the difference between &a_slice[0] and &a_slice
+	fmt.Printf("%p, cap: %v\n", &a_slice[0], cap(a_slice))
+	fmt.Printf("%p, cap: %v\n", &a_slice, cap(a_slice))
+//=======================================================================
 
 }
