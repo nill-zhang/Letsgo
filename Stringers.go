@@ -49,6 +49,8 @@ func main() {
 // [1].
 // Stringer is an interface, when a concrete type implements its String()
 // method, when you use fmt to print the value, fmt will look for its string() method
+// because fmt.Print only accept Stringer type values, which must satisfy Stringer interface
+// by defining a String() method
 //
 // [2].
 // using + to break string to multiple lines
