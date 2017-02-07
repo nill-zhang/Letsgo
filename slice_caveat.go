@@ -1,5 +1,5 @@
 package main
-import "fmt"
+import ("fmt";"math/rand")
 
 func modify1(slice *[]int){
     	*slice = (*slice)[:3]
@@ -37,8 +37,15 @@ func main(){
     	modify3(original3)
     	fmt.Println("original3: = ", original3)
 
-
+        test := make([]int, 7)
+	for i:=0;i<7;i++{
+		test[i] = rand.Intn(20)
+	}
+	fmt.Println("test: = ", test)
+	modify2(test)
+	fmt.Println("test: = ", test)
 }
+
 /*
 Result:
 within modify1: [1 2 3]
@@ -55,4 +62,4 @@ the other two changes the underlying data, in the second modify
 we just using a local variable slice assigned to point to the original slice
 it has no effect on the original one
 
-/*
+*/
