@@ -112,6 +112,40 @@ func test_filter_factory(){
 
 }
 
+type Grades struct{
+
+	score map[string]([]float64)
+	average func([]float64) float64
+}
+
+func test_func_asdata(){
+	// This sort of definition is not right
+	/*func calc_average(g []float64) float64{
+		sum := 0
+		for _, value := range g{
+			sum+= value
+		}
+		return sum/len(g)
+	}*/
+        
+
+	// using anonymous func instead
+	calc_average := func(g []float64) float64 {
+		sum := 0.0
+		for _, value := range g {
+			sum += value
+		}
+		return sum / float64(len(g))
+	}
+
+	grades :=Grades{score:map[string]([]float64){"math":{74,84,81,79}, "physics":{66,77,97}}, average: calc_average}
+	fmt.Printf("Average score of Math: %v\n", grades.average(grades.score["math"]))
+	fmt.Printf("Average score of Physics: %v\n", grades.average(grades.score["physics"]))
+
+
+
+
+}
 
 func main() {
 
@@ -131,6 +165,7 @@ func main() {
 	test_generator_compute()
 	test_filter()
 	test_filter_factory()
+	test_func_asdata()
 
 
 }
