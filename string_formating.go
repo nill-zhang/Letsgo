@@ -55,12 +55,6 @@ func test_strconv_parse(){
 
 func  test_string_format(){
 
-	type Resident struct{
-		name string
-		age uint8
-		weight float32
-	}
-
 	//alex := Resident{"张少锋",29,70.21}
 	p := fmt.Printf
 	byte_slice1 := []byte{122,74,75, 93, 109}
@@ -86,7 +80,30 @@ func  test_string_format(){
 	p("%U\n",9752)
 	p("%#U\n",0x2618)
 	p("%#b\n",0x2618)
-	p("%[2]s	%[1]s", "是张少锋","我的名字")
+	p("%[2]s	%[1]s\n", "是张少锋","我的名字")
+
+	characters_hex := []rune{0x767d, 0x9d6c, 0x7fd4}
+	p("%s\n", string(characters_hex))
+	characters_decimal := []rune{30333, 40300, 32724}
+	p("%s\n", string(characters_decimal))
+
+	// characters_u := []rune{\u767d, \u9d6c, \u7fd4}
+	// p("%s\n", string(characters_u))
+
+	// it must be single quote
+	characters_x := []rune{'\x76', '\x7d', '\x9d', '\x6c', '\x7f', '\xd4'}
+	p("%s\n", string(characters_x))
+
+	p(fmt.Sprintf("%#X\n", "张"))
+
+	myname := string("张少锋")
+	b := []rune(myname)
+	p("%U\n",b)
+	p("%#U\n",b)
+	p("%c",b)
+
+
+
 
 }
 
