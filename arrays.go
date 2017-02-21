@@ -45,10 +45,10 @@ func main() {
 		println("yes, they are all the same")
 	}
 
-	
+
 	// specify an slice or array by index-value pair, for those not specified zero value
-	// of its type, empty string here
-	var color = []string {0:"red", 1:"black",  3:"pink", 5:"saphire", 2:"yellow"}
+	// of its type, empty string here, indices can be out of order, can be omitted
+	var color = []string {0:"red", 1:"black",  3:"pink", 5:"saphire", 2:"yellow", 20:"blue"}
 	for i := range color{
 		fmt.Printf("%d---->%v\n",i, color[i])
 	}
