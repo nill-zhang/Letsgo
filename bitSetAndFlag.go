@@ -23,6 +23,10 @@ func isAnycastAddress(address flag) bool {
 	return (address & anycastAddressFlag) == anycastAddressFlag
 }
 
+
+// Note that we didn't modify the input, we return a new one, if you
+// want to modify the input use its pointer as an argument and do the
+// *address |= multicastAddressFlag alike
 func toMulticastAddress(address flag) flag { return address | multicastAddressFlag}
 func flipLoopbackAddress(address  flag) flag{return address ^ loopbackAddressFlag}
 func toNotAnycastAddress(address  flag) flag{return address &^ anycastAddressFlag}
@@ -30,8 +34,7 @@ func isCastAddress(address flag) bool {
 	return (address & (broadcastAddressFlag | multicastAddressFlag | anycastAddressFlag)) != 0
 }
 
-func main() {
-
+func address_test(){
 	var noBroadcast, broadcast flag = 240, 17
 	var noMulticast, multicast flag = 13, 34
 	var noLoopback, loopback flag = 11, 69
@@ -57,6 +60,30 @@ func main() {
 	p("%08b is cast address? [%t]\n", noLoopback, isCastAddress(noLoopback))
 	p("%08b is cast address? [%t]\n", anycast, isCastAddress(anycast))
 	p("%08b is cast address? [%t]\n", noMulticast, isCastAddress(noMulticast))
+}
+
+func set_test(){
+	var x, y uint8 = 1<<4|1<<3|1<<7, 1<<2|1<<5|1<<3
+        fmt.Printf("x: %08b, Y: %08b\n", x,y)
+	fmt.Printf("x|y:  %08b\n",x|y)  // union
+	fmt.Printf("x&y:  %08b\n",x&y)  // intersection
+	fmt.Printf("x^y:  %08b\n",x^y)  // symmetric difference
+	fmt.Printf("x&^y: %08b\n",x&^y) // x-y
+	fmt.Printf("y&^x: %08b\n",y&^x) // y-x
+	// test membership
+	for i:=uint8(0);i<=7;i++{
+		if x&(1<<i) != 0{
+			fmt.Printf("%d bit in x is on\n",i)
+		}
+
+	}
+
+
+
+}
+
+func main() {
+	set_test()
 
 
 
