@@ -4,6 +4,25 @@ import (
 	"fmt"
 )
 
+// a slice parameter is just an alias of the original
+// whatever you do with the parameter will visible to the
+// caller
+func reverse(a []byte){
+	for i:=0; i<len(a)/2; i++{
+		a[i],a[len(a)-1-i] = a[len(a)-1-i], a[i]
+	}
+}
+
+func reverse_test(){
+
+	 b := []byte("0123456789")
+	reverse(b)
+	fmt.Println(string(b))
+	b = []byte("123456789")
+	reverse(b)
+	fmt.Println(string(b))
+}
+
 func main() {
 
 	a := make([]int, 3)
@@ -106,5 +125,5 @@ func main() {
 	fmt.Printf("%p, cap: %v\n", &a_slice[0], cap(a_slice))
 	fmt.Printf("%p, cap: %v\n", &a_slice, cap(a_slice))
 //=======================================================================
-
+        reverse_test()
 }
