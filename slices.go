@@ -38,13 +38,18 @@ func RemoveAdjacentDuplicates(s []int) []int{
 }
 
 func ReverseCharacters(b []byte) []byte{
+	/* I use a in-place technique to do the reverse
+	   operation, I didn't allocate new momery, insted
+	   , I shift the unprocessed slice to the end after I
+	   extract the last rune and put it at the beginning
+	*/
 	a := b[:0]
 	for {
 		rune, size := utf8.DecodeLastRune(b)
 		if rune == utf8.RuneError && size == 0{
 			break
 		}
-
+		// just can not use the following
 		// b[size:] := b[:len(b) - size]
 		copy(b[size:],b[:len(b) - size])
 		a = append(a, []byte(string(rune))...)
