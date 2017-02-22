@@ -2,26 +2,97 @@ package main
 
 import (
 	"fmt"
+	"unicode/utf8"
 )
 
 // a slice parameter is just an alias of the original
 // whatever you do with the parameter will visible to the
 // caller
-func reverse(a []byte){
+func Reverse(a []byte){
 	for i:=0; i<len(a)/2; i++{
 		a[i],a[len(a)-1-i] = a[len(a)-1-i], a[i]
 	}
 }
 
-func reverse_test(){
+// looks complicated, it is very easy, rotate behaves like block shift
+// cut it then move the two separated parts
+func Rotate(s []int, step int)[]int {
 
-	 b := []byte("0123456789")
-	reverse(b)
+	if step < 0 {
+		s = append(s[-step:], s[:-step]...)
+	} else {
+		s = append(s[len(s) - step:], s[:len(s) - step]...)
+	}
+	return s
+}
+
+func RemoveAdjacentDuplicates(s []int) []int{
+	// not using s[0], because we need a slice not an element
+	b := s[:1]
+	for _, value := range s[1:]{
+		if value != b[len(b)-1]{
+			b = append(b,value)}
+	}
+
+	return b
+}
+
+func ReverseCharacters(b []byte) []byte{
+	a := b[:0]
+	for {
+		rune, size := utf8.DecodeLastRune(b)
+		if rune == utf8.RuneError && size == 0{
+			break
+		}
+
+		// b[size:] := b[:len(b) - size]
+		copy(b[size:],b[:len(b) - size])
+		a = append(a, []byte(string(rune))...)
+		b = b[size:]
+	}
+	return a
+
+
+}
+
+
+func Reverse_test(){
+
+	b := []byte("0123456789")
+	Reverse(b)
 	fmt.Println(string(b))
 	b = []byte("123456789")
-	reverse(b)
+	Reverse(b)
 	fmt.Println(string(b))
 }
+
+func Rotate_test(){
+	a := []int{3,4,5,6,7,8,9,10,11,12,13}
+	fmt.Printf("a: %v\nleft rotate a by 2 spots: %v\n",a, Rotate(a, -2))
+	fmt.Printf("a: %v\nright rotate a by 3 spots: %v\n",a, Rotate(a, 3))
+
+}
+
+
+func RemoveAdjacentDuplicates_test(){
+	a := []int{-1, 2, -3, -2, -2, -2, -2, 3,2,3,90,87,4,4,0,5,2}
+	fmt.Printf("a: %v\n",a)
+	fmt.Printf("after removing duplicates: a: %v\n",RemoveAdjacentDuplicates(a))
+
+
+
+}
+
+func ReverseCharacters_test(){
+	 comments := "张少锋的yingyu很好！"
+	 newcomments := ReverseCharacters([]byte(comments))
+	 fmt.Printf("comments is %v\nafter reverse its characters" +
+		" comment is %v\n", comments, string(newcomments))
+
+
+
+}
+
 
 func main() {
 
@@ -125,5 +196,8 @@ func main() {
 	fmt.Printf("%p, cap: %v\n", &a_slice[0], cap(a_slice))
 	fmt.Printf("%p, cap: %v\n", &a_slice, cap(a_slice))
 //=======================================================================
-        reverse_test()
+        Reverse_test()
+	RemoveAdjacentDuplicates_test()
+	ReverseCharacters_test()
+	Rotate_test()
 }
