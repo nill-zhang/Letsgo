@@ -76,7 +76,7 @@ func GenerateTable(wr http.ResponseWriter, _ *http.Request){
 		}
 
 	}
-
+        f.Close()
 	t.Execute(wr, cops)
 
 }
