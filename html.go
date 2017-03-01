@@ -24,23 +24,24 @@ func TraverseElementNode(stack []string, n *html.Node) {
 }
 
 // todo : to be fixed, can not print all the texts
-func TraverseTextNode(mp map[string]string, n *html.Node){
-	if n.Type == html.TextNode{
+func TraverseTextNode(mp map[string]string, n *html.Node) {
+	if n.Type == html.TextNode {
 
 		text := strings.TrimSpace(n.Data)
-		if text != ""{
+		if text != "" {
 			// generate ParentElement: Text pair
 			mp[n.Parent.Data] = text
 		}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		// don't descend into script or style element
-		// since their contents are not visible in a web browser
-		if c.Data == "script" || c.Data == "style" {
-			continue
-			TraverseTextNode(mp, c)
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			// don't descend into script or style element
+			// since their contents are not visible in a web browser
+			if c.Data == "script" || c.Data == "style" {
+				continue
+				TraverseTextNode(mp, c)
+			}
 		}
-	}
 
+	}
 }
 
 func TraverseTextNode2(rd io.Reader) {
