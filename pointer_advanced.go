@@ -97,7 +97,8 @@ func ReferenceNormal(re *uint, nm uint ){
 	// a, you reassign a by changing its values on the address of that memory
 	// location(*re = 888)
 	// &re and &c are completely different, because they are different variables' addresses
-
+        // see http://stackoverflow.com/questions/4938612/how-do-i-print-the-pointer-value-of-a-go-object-what-does-the-pointer-value-mea
+	// for details
 
 	fmt.Printf("Inner: %v, %v\n",re, nm)
 	fmt.Printf("Inner: %p, %p\n",&re, &nm)
