@@ -6,7 +6,8 @@ type User struct {
 	Name string
 }
 
-func main() {
+
+func Modify_test(){
 	u1 := &User{Name: "Leto"}
 	u2 := User{Name: "Leto"}
 	u3 := &User{Name: "Leto"}
@@ -31,7 +32,10 @@ func main() {
 	*double_sum = sum * 2 //use the allocated memory, by dereferencing double_sum
 	fmt.Println("The sum of numbers from 0 to 10 is: ", sum)
 	fmt.Println("The double of this sum is: ", *double_sum)
+
+
 }
+
 
 func Modify1(u *User) {
 	// u is an variable, pointer type
@@ -57,4 +61,67 @@ func Modify3(u **User) {
 	// we change(u3) its content to reference to another address(User{Name: "Bob"})
 
 	*u = &User{Name: "Bob"}
+}
+
+
+func SliceArray(){
+	names := [...]string{"Alex","Helen","Nova","Feven"}
+	samenames := names[:]
+	subnames := names[0:2]
+	//fmt.Printf("%p\n", names)
+	fmt.Printf("%p\n", &names)
+	//fmt.Printf("%v\n", &names)
+	fmt.Printf("%p\n", &names[0])
+	//fmt.Printf("%p\n", names[0])
+	fmt.Printf("%v\n", samenames)
+	fmt.Printf("%p\n", samenames)
+	// note that the following two are different
+	// &samenames is a pointer with a value of the address of a slice variable
+	// when you use %p to format samenames, you are getting the address of the slice
+	// the address of the very first element
+	fmt.Printf("%p\n", &samenames)
+	fmt.Printf("%v\n", &samenames)
+	fmt.Printf("%p\n", &samenames[0])
+	fmt.Printf("%p\n", subnames)
+}
+
+
+func ReferenceNormal(re *uint, nm uint ){
+        // go pass arguments by values, re and nm are local variables passed with
+	// the same values as outer variables c and b accordingly
+	// the only difference is re's value is an address(of a)
+	// nm's value is a int, when you change re and nm, you just
+	// change the local variable's values, it has no effect on
+	// the outer c and b, because they are local copies
+	// *re and *c are the same because they points to the same underlying
+	// a, you reassign a by changing its values on the address of that memory
+	// location(*re = 888)
+	// &re and &c are completely different, because they are different variables' addresses
+
+
+	fmt.Printf("Inner: %v, %v\n",re, nm)
+	fmt.Printf("Inner: %p, %p\n",&re, &nm)
+	*re = 888
+	re = nil
+	nm = 0
+}
+
+func ReferenceNormal_test(){
+
+	var a,b uint = 8,8
+	c := &a
+	fmt.Printf("Before: %v, %v\n",c, b)
+	fmt.Printf("Before: %p, %p\n",&c, &b)
+	ReferenceNormal(c,b)
+	fmt.Printf("After: %v, %v\n",c, b)
+	fmt.Printf("After: %p, %p\n",&c, &b)
+	fmt.Printf("After: %v\n",*c)
+	fmt.Printf("After: %v\n",a)
+
+}
+
+func main() {
+	Modify_test()
+	ReferenceNormal_test()
+	SliceArray()
 }
