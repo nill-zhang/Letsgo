@@ -4,6 +4,7 @@ import ("fmt"
 )
 
 func ForScopeWithOneVariable() {
+	/////////////////////////////////////////////////////////////////
 	var ops1 []func()
 	names := []string{"sfzhang", "xlyang", "lyzhang"}
 	for _, name := range names {
@@ -14,11 +15,35 @@ func ForScopeWithOneVariable() {
 
 	}
 
+	// when you start executing those prints, They will
+	// evaluate variable names and find they all share the
+	// same name
 	for _, print := range ops1 {
 
 		print()
 
 	}
+	//////////////////////////////////////////////////////////////////
+	fmt.Println(strings.Repeat("*",180))
+	letters := []string{"a","b","c","d"}
+	var funcs []func()
+
+	for i:=0;i<len(letters);i++{
+		funcs = append(funcs, func(){fmt.Println(i)})
+	}
+	// the following for loop will cause panic, because when you start executing
+	// those prints, they all will evaluate variable i, at that time i == 4
+	// due to for loop, letters[4] yields index out of range errors
+	// for i:=0;i<len(letters);i++{
+	//	 funcs = append(funcs, func(){fmt.Println(letters[i])})
+	// }
+
+	for _,print :=range funcs{
+	   print()
+	}
+
+
+
 }
 
 func ForScopeWithInnerVariable() {
@@ -39,6 +64,21 @@ func ForScopeWithInnerVariable() {
 		print()
 
 	}
+
+        ///////////////////////////////////////////////////////////////
+	fmt.Println(strings.Repeat("*",180))
+	letters := []string{"a","b","c","d"}
+	var funcs []func()
+
+	for i:=0;i<len(letters);i++{
+		temp := letters[i]
+		funcs = append(funcs, func(){fmt.Println(temp)})
+	}
+
+	for _,print :=range funcs{
+	   print()
+	}
+
 
 }
 
@@ -108,6 +148,40 @@ func ReferenceType_Test(){
 }
 
 
+func IfScope(){
+        var c uint8
+	if a:=-3; a>0 {
+		c = 8
+		fmt.Printf("%v\n",a)
+	}else {
+		a = -a
+		fmt.Printf("%v\n",a)
+
+	}
+	// undefined: a
+	// fmt.Printf("%v\n",a)
+	fmt.Printf("%v\n",c)
+
+
+}
+
+func ForScope(){
+
+	var name string
+	for i:=1;i<3;i++{
+		var age string
+		fmt.Printf("inside for name: %v, age:%v",name,age)
+
+
+	}
+	// undefined: i
+	// undefined: age
+	// fmt.Printf("%v",i)
+	// fmt.Printf("%v",age)
+
+}
+
+
 
 func main() {
 
@@ -129,6 +203,8 @@ func main() {
 
 	fmt.Println(strings.Repeat("*", 180))
 	ReferenceType_Test()
+	IfScope()
+	ForScope()
 
 
 
