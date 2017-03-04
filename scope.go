@@ -64,7 +64,8 @@ func ReferenceType1(intf ...interface{}) {
 		d := j
 		// grasp the difference between the following two lines of code
 		// is essential to fully understand  what happens inside ForScopeWithOneVariable
-		fmt.Printf("Inner Address:%p\t",j)
+		//fmt.Printf("Inner Address:%p\t",j)
+		//fmt.Printf("Inner Address:%p\t",&j)
 		fmt.Printf("Inner Address:%p\t",d)
 	}
 	fmt.Println()
@@ -97,7 +98,11 @@ func ReferenceType_Test(){
 	fmt.Printf("Outer Address:%p\t",ch)
 	fmt.Printf("Outer Address:%p\t",y)
 	fmt.Printf("Outer Address:%p\n",&nm)
-
+        // the following two will get the same results
+	// because all the parameters are reference types
+	// except the last one, go functions pass by values
+	// the values of these types are  with a
+	// pointer pointing to the underlying structures
 	ReferenceType1(lst, dict, ch, y,nm)
 	ReferenceType2(lst, dict, ch, y,nm)
 }
