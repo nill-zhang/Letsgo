@@ -16,6 +16,41 @@ func custom_append(s []int, apd ...int) []int{
 
 }
 
+func Min(lst ...int32) int32{
+	if len(lst) < 1{
+		return -1
+	}
+	min := lst[0]
+	for i:=1;i<len(lst);i++{
+		if min > lst[i]{
+			min = lst[i]
+
+		}
+	}
+	return min
+}
+
+func Max(lst ...float32) float32{
+	if len(lst) < 1{
+		return -1.0
+	}
+	max := lst[0]
+	for i:=1;i<len(lst);i++{
+		if max < lst[i]{
+			max = lst[i]
+
+		}
+	}
+	return max
+
+}
+
+func Sum(uint32) uint32{
+
+
+}
+
+
 func main() {
 
 	var  original = []int{1,1,1,1,1,1,1}
