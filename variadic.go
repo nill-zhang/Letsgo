@@ -45,9 +45,13 @@ func Max(lst ...float32) float32{
 
 }
 
-func Sum(uint32) uint32{
+func Sum(lst  ...uint32) uint32{
+	total := 0
+	for i:=0;i<len(lst);i++{
+		total += lst[i]
 
-
+	}
+return  total
 }
 
 
