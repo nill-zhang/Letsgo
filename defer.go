@@ -152,6 +152,40 @@ func OpenFiles(files []string){
 
 }
 
+func WillPanic() (err1, err2 error){
+        // defer will run before panic panics
+	// defer func must be declared before all other code
+	defer func(){
+		buf := make([]byte, 4096)
+		n := runtime.Stack(buf,false)
+		part1 := string(buf[:n])
+
+		if p := recover();p!=nil{
+			part2 := fmt.Sprintf("%v has happended\n", p)
+			err1 = fmt.Errorf(part1)
+			err2 = fmt.Errorf(part2)
+
+
+		}
+
+	}()
+
+	employees := []string{"Michael","Alex","Bob"}
+
+	// will panic because len(employees) < 2000
+	for i:=0;i<2000;i++{
+		fmt.Println(employees[i])
+	}
+
+	return
+
+}
+
+
+
+
+
+
 
 func main() {
         p := fmt.Println
@@ -171,6 +205,19 @@ func main() {
 
 	p(strings.Repeat("*", 180))
 	p(ChangeReturn())
+
+	p(strings.Repeat("*", 180))
+	err1, err2 := WillPanic()
+
+	fmt.Println("\033[34m")
+	fmt.Println(err1.Error())
+
+
+	fmt.Println("\033[35m")
+	fmt.Println(err2.Error())
+	fmt.Println("\033[0m")
+
+
 
 }
 
