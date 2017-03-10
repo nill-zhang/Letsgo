@@ -6,6 +6,9 @@ import (
 	"fmt"
 )
 
+// LowerToUpper type satisfies io.Writer interface
+// It will store and convert the bytes from p slices
+// to its upper case string form
 type LowerToUpper string
 
 func (s *LowerToUpper) Write(p []byte) (n int, err error){
@@ -28,7 +31,9 @@ func LowerToUpper_test(){
 
 }
 
-
+// ByteCounter has a Write method its counts
+// how many bytes are written from P slices
+// I can also implement RuneCounter, WordCounter, LineCounter
 type ByteCounter uint32
 
 func (c *ByteCounter) Write(p []byte) (n int,err error){
