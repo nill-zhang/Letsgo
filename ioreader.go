@@ -50,12 +50,12 @@ func test_Custom_ioReader(){
 }
 
 
-type Rd struct{
+type MyStringReader struct{
 	        str string
 		cur int
 	}
 
-func(R *Rd) Read(p []byte)(m int, err error){
+func(R *MyStringReader) Read(p []byte)(m int, err error){
 		if len(p) + R.cur <= len(R.str) {
 			m = copy(p, []byte(R.str[R.cur:len(p) + R.cur]))
 			R.cur = R.cur + m
@@ -68,22 +68,26 @@ func(R *Rd) Read(p []byte)(m int, err error){
 	}
 
 
-func MyReader(s string) io.Reader{
+func NewMyStringReader(s string) io.Reader{
 
-	r := Rd{s,0}
+	r := MyStringReader{s,0}
 	return &r
 }
 
 
-func MyReader_test(){
-	y := MyReader("This is freaking awesome!!")
+func MyStringReader_test(){
+	y := NewMyStringReader("This is freaking awesome!!")
 	p := make([]byte, 4)
 	for{
 		n,err := y.Read(p)
 		// you should not print n-p pair after if-statement
 		// because you get out of the loop early and leave out the final
 		// pair
-		fmt.Printf("%d bytes read, Buffer: %v\n",n,string(p))
+		if n < len(p){
+			fmt.Printf("%d bytes read, Buffer: %v\n",n,string(p[:n]))
+		}else{
+			fmt.Printf("%d bytes read, Buffer: %v\n",n,string(p))
+		}
 		if err != nil{
 			break
 	}
@@ -91,50 +95,64 @@ func MyReader_test(){
 	}
 }
 
-//func LimitReader(r io.Reader, n int) (newr io.Reader){
-//	//p := make([]byte, 1)
-//	total := 0
-//	func (newr io.Reader) Read(p []byte)(m int, err error){
-//		m,err = r.Read(p)
-//		total += m
-//		if total > n {
-//			m = m-(total-n)
-//			err = io.EOF
-//			return
-//		}
-//		return
-//
-//
-//	}
-//	return
-//
-//
-//}
+type LimitReader struct{
+	r io.Reader
+	n int
+        total int
+	}
+
+func (l *LimitReader)Read(p []byte)(m int, err error){
 
 
+	m,err = l.r.Read(p)
+	l.total += m
+		if l.total > l.n {
+			m = m-(l.total-l.n)
+			// the following line of code does not work
+			// even though you changed p here
+			// the caller still sees the full p
+			// p = p[:m]
+			err = io.EOF
+			return
+		}
+		return
+}
 
-//func LimitReader_test(){
-//	r := strings.NewReader("woshiyigefeichangliaobuqideren")
-//	newr := LimitReader(r,7)
-//	p := make([]byte, 3)
-//
-//	for {
-//		nbytes, err := newr.Read(p)
-//		if err!= nil{
-//			break
-//		}
-//		fmt.Printf("%v bytes read, Buffer:%v\n",nbytes,string(p))
-//
-//	}
-//
-//
-//}
+
+func NewLimitReader(r io.Reader, n int)  *LimitReader{
+
+	return &LimitReader{r,n,0}
+}
+
+func LimitReader_test(){
+
+	p := make([]byte, 4)
+	r := strings.NewReader("this is a test function which tests LimitReader")
+	y := NewLimitReader(r,11)
+	for{
+		n,err := y.Read(p)
+		// you should not print n-p pair after if-statement
+		// because you get out of the loop early and leave out the final
+		// pair
+		if n < len(p){
+			fmt.Printf("%d bytes read, Buffer: %v\n",n,string(p[:n]))
+		}else{
+			fmt.Printf("%d bytes read, Buffer: %v\n",n,string(p))
+		}
+		if err != nil{
+			break
+	}
+
+	}
+
+
+}
 
 func main() {
 
 	//test_Custom_ioReader()
 	//test_ioReader()
-	MyReader_test()
-	//LimitReader_test()
+	MyStringReader_test()
+	LimitReader_test()
 
 }
