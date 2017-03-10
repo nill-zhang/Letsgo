@@ -4,6 +4,10 @@ import (
 	"os"
 	"strings"
 	"fmt"
+	"io"
+	"log"
+	"io/ioutil"
+	"path/filepath"
 )
 
 // LowerToUpper type satisfies io.Writer interface
@@ -51,6 +55,62 @@ func ByteCounter_test(){
 
 }
 
+type CountingWriter struct{
+	number *int64
+	w io.Writer
+}
+
+func (c *CountingWriter) Write(p []byte)(n int, err error){
+	n,err = c.w.Write(p)
+	*(c.number) += int64(n)
+	return
+
+}
+
+func NewCountingWriter(w io.Writer)(io.Writer, *int64){
+	newW := &CountingWriter{new(int64),w}
+
+	return newW,newW.number
+
+
+}
+
+func CountingWriter_test(){
+        // change to the letsgo directory and create 2 absolute filepath
+	os.Chdir("C:/Users/Admin/Documents/golang/resources/letsgo")
+	rpath,err1 := filepath.Abs("defer.go")
+	wpath,err2 := filepath.Abs("test.txt")
+	if err1!= nil || err2 != nil{
+		log.Fatalf("Can not create absolute path, (%v,%v)\n", err1, err2)
+	}
+
+	bytes,err := ioutil.ReadFile(rpath)
+	if err != nil{
+		log.Fatalf("%v while open %v\n", err, rpath)
+	}
+	fw, err := os.Create(wpath)
+	defer fw.Close()
+	if err != nil{
+		log.Fatalf("%v while creating %v\n", err, wpath)
+	}
+	nw, number := NewCountingWriter(fw)
+	n, _ := nw.Write(bytes)
+
+	fmtstr := "%v bytes read, total %v bytes written\n"
+	p:= fmt.Printf
+
+	p(fmtstr,n,*number)
+
+	n, _ = nw.Write([]byte("done!\n"))
+	p(fmtstr,n,*number)
+
+	n, _ = nw.Write([]byte("see you"))
+	p(fmtstr,n,*number)
+
+	n, _ = nw.Write([]byte("awesome job!!"))
+	p(fmtstr,n,*number)
+}
+
 
 
 
@@ -58,6 +118,9 @@ func main(){
 
 	LowerToUpper_test()
 	ByteCounter_test()
+	CountingWriter_test()
+
+
 
 
 
