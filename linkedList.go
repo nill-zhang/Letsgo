@@ -2,17 +2,17 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 type LinkedList struct{
-	value int64
+	value int
 	next *LinkedList
 
 }
 
-func (l *LinkedList)Sum() (sum int64){
-	fmt.Println(l)
-	//fmt.Println(l.value)
+func (l *LinkedList)Sum() (sum int){
 	if l.next == nil{
 		sum = l.value
 		return
@@ -24,7 +24,7 @@ func (l *LinkedList)Sum() (sum int64){
 
 }
 
-func (l *LinkedList)Len()(len int64){
+func (l *LinkedList)Len()(len int){
 	if  l.next == nil{
 		return 1
 	}
@@ -34,7 +34,7 @@ func (l *LinkedList)Len()(len int64){
 
 }
 
-func (l *LinkedList)Average()int64{
+func (l *LinkedList)Average()int{
 	return l.Sum()/l.Len()
 
 
@@ -42,7 +42,7 @@ func (l *LinkedList)Average()int64{
 }
 
 
-func (l *LinkedList)Max() (max int64){
+func (l *LinkedList)Max() (max int){
 	for l !=nil{
 		if max < l.value {
 			max = l.value
@@ -54,7 +54,7 @@ func (l *LinkedList)Max() (max int64){
 
 
 
-func (l *LinkedList)Min()(min int64){
+func (l *LinkedList)Min()(min int){
 	for l !=nil{
 		if min < l.value {
 			min = l.value
@@ -70,12 +70,23 @@ func (l *LinkedList)Min()(min int64){
 
 func (l *LinkedList)Sort(){
 	length := l.Len()
+	// keep the head pointer
+	beg := l
 	for i:=0;i<length-1;i++ {
-		for j:=0;j<length-1-i;j++{
-			if (l.next != nil)  && (l.value > l.next.value) {
-				l.value, l.next.value = l.next.value, l.value
+		// start over from the head
+		l := beg
+		for j:=0;j<length-1-i ;j++{
+			if l.next != nil {
+				if (l.next != nil)  && (l.value > l.next.value) {
+
+					temp := l.value
+					l.value = l.next.value
+					l.next.value = temp
+
+				}
+				l = l.next
 			}
-			l = l.next
+
 		}
 
 	}
@@ -84,15 +95,24 @@ func (l *LinkedList)Sort(){
 
 }
 
-func (l *LinkedList)ReverseSort(){
+func (l *LinkedList)Elem() []int{
 	length := l.Len()
-	temp := make([]int64,length)
-	fmt.Printf(" Initial temp: %v\n",temp)
-	l.Sort()
+	temp := make([]int,length)
 	for i := range temp{
 		temp[i] = l.value
+		l = l.next
 	}
+	return temp
 
+
+
+
+}
+
+func (l *LinkedList)ReverseSort(){
+	l.Sort()
+        temp := l.Elem()
+	length := len(temp)
 	for i:=0;i<length/2;i++ {
 		temp[i],temp[length-i] =  temp[length-i],temp[i]
 
@@ -106,7 +126,7 @@ func (l *LinkedList)ReverseSort(){
 
 }
 
-func (l *LinkedList)Remove(num int64) error{
+func (l *LinkedList)Remove(num int) error{
 
 
 
@@ -142,16 +162,16 @@ func (l *LinkedList)Clear(){
 
 }
 
-func (l *LinkedList)Add(num int64){
-	for l != nil{
+func (l *LinkedList)Add(num int){
+	for l.next != nil{
 		l = l.next
 	}
 	new := &LinkedList{num, nil}
-	l = new
+	l.next = new
 
 }
 
-func (l *LinkedList)Has(num int64) (*LinkedList,bool){
+func (l *LinkedList)Has(num int) (*LinkedList,bool){
 	for l!=nil{
 		if l.value == num{
 			return l, true
@@ -164,7 +184,7 @@ func (l *LinkedList)Has(num int64) (*LinkedList,bool){
 
 }
 
-func  (l *LinkedList)InSertBefore(target, num int64) (*LinkedList, error){
+func  (l *LinkedList)InsertBefore(target, num int) (*LinkedList, error){
 	p, has := l.Has(target)
 	if !has{
 		return nil,fmt.Errorf("no such elements whose value is %v\n", target)
@@ -172,20 +192,20 @@ func  (l *LinkedList)InSertBefore(target, num int64) (*LinkedList, error){
 	if p == l {
 		temp := p
 		p := &LinkedList{num,temp}
-		return p
+		return p,nil
 	}
 	for l.next != p {
 		l = l.next
 	}
 	l.next = &LinkedList{num,p}
-	return l.next
+	return l.next,nil
 
 
 
 
 }
 
-func  (l *LinkedList)InserAfter(target, num int64)(*LinkedList, error){
+func  (l *LinkedList)InsertAfter(target, num int)(*LinkedList, error){
 	p, has := l.Has(target)
 	if !has {
 		return nil,fmt.Errorf("no such elements whose value is %v\n", target)
@@ -201,13 +221,17 @@ func  (l *LinkedList)InserAfter(target, num int64)(*LinkedList, error){
 
 }
 
-func (l *LinkedList)InsertAs(index,num int64) (*LinkedList,error){
+func (l *LinkedList)InsertAs(index,num int)(*LinkedList,error) {
 	if index > l.Len() || index <0{
 		return nil, fmt.Errorf("Index:%v out of range\n",index)
 	}
         if index == 0{
-		temp := l
-		l = &LinkedList{num,temp}
+		originalValue := l.value
+		temp := l.next
+
+		originalHead := &LinkedList{originalValue,temp}
+		l.value = num
+		l.next = originalHead
 		return l, nil
 	}
 
@@ -216,15 +240,67 @@ func (l *LinkedList)InsertAs(index,num int64) (*LinkedList,error){
 		if i+1 == index{
 			temp :=  l.next
 			l.next = &LinkedList{num,temp}
-			return l.next,nil
+			break
 		}
 		l = l.next
 	}
+	return l.next,nil
+}
+
+
+func (l *LinkedList)String()string{
+	elements := l.Elem()
+	s :=[]string{}
+	for i:=0;i<len(elements);i++{
+		s = append(s,strconv.Itoa(elements[i]))
+	}
+	return "["+strings.Join(s,",")+"]"
 
 
 
 
 
+
+}
+func LinkedListInclusive_test(){
+	p := &LinkedList{0,nil}
+	p.Add(-6)
+	p.Add(54)
+	p.Add(17)
+	p.Add(69)
+	p.Add(16)
+	_, has := p.Has(6)
+	fmt.Printf("has 6 ? %v\n",has)
+	_, has = p.Has(-4)
+	fmt.Printf("has -4 ? %v\n",has)
+	_, has = p.Has(67)
+	fmt.Printf("has 67 ? %v\n",has)
+	_, has = p.Has(69)
+	fmt.Printf("has 69 ? %v\n",has)
+	_, has = p.Has(-16)
+	fmt.Printf("has -16 ? %v\n",has)
+	p.Remove(69)
+	_, has = p.Has(69)
+	fmt.Printf("has 69 ? %v\n",has)
+	fmt.Printf("Average: %v\n", p.Average())
+	fmt.Printf("Sum: %v\n", p.Sum())
+	fmt.Printf("Max: %v\n", p.Max())
+	fmt.Printf("Min: %v\n", p.Min())
+	fmt.Printf("p: %s\tlength: %d\n", p,p.Len())
+	p.Sort()
+	fmt.Printf("p: %s\n", p)
+	p.InsertAs(0,777)
+	p.InsertAs(0,512)
+	p.InsertAs(3,43)
+	p.InsertAs(3,90)
+	p.InsertAs(5,-30)
+	p.InsertBefore(777,76)
+	p.InsertAfter(512,13)
+	fmt.Printf("p: %s\n", p)``
+	p.Sort()
+	fmt.Printf("p: %s\n", p)
+	p.Clear()
+	fmt.Printf("p: %s\n", p)
 
 
 
@@ -257,5 +333,6 @@ func LinkedList_test(){
 }
 
 func main() {
-	LinkedList_test()
+	//LinkedList_test()
+	LinkedListInclusive_test()
 }
