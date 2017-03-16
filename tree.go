@@ -90,6 +90,24 @@ func (b *BinarySearchTree)Has(num int)bool{
 
 }
 
+
+func (b *BinarySearchTree)Max() int{
+
+	return
+}
+
+
+func (b *BinarySearchTree)Min() int{
+
+	return
+}
+
+func (b *BinarySearchTree)Height() int{
+
+	return
+}
+
+
 func BinarySearchTreeInitial_test(){
 
 	bt := &BinarySearchTree{34,nil,nil,nil,nil}
