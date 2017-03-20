@@ -12,6 +12,7 @@ type LinkedList struct{
 
 }
 
+// Sum sums up values of all linkedlist's nodes
 func (l *LinkedList)Sum() (sum int){
 	if l.next == nil{
 		sum = l.value
@@ -24,6 +25,7 @@ func (l *LinkedList)Sum() (sum int){
 
 }
 
+// Len returns the length of the linkedlist
 func (l *LinkedList)Len()(len int){
 	if  l.next == nil{
 		return 1
@@ -34,6 +36,7 @@ func (l *LinkedList)Len()(len int){
 
 }
 
+// Average returns the average value of the linkedlist nodes
 func (l *LinkedList)Average()int{
 	return l.Sum()/l.Len()
 
@@ -41,7 +44,7 @@ func (l *LinkedList)Average()int{
 
 }
 
-
+// Max returns the greatest node vaule in the linkedlist
 func (l *LinkedList)Max() (max int){
 	for l !=nil{
 		if max < l.value {
@@ -53,7 +56,7 @@ func (l *LinkedList)Max() (max int){
 }
 
 
-
+// Min returns the smallest node value in the linkedlist
 func (l *LinkedList)Min()(min int){
 	for l !=nil{
 		if min < l.value {
@@ -67,22 +70,19 @@ func (l *LinkedList)Min()(min int){
 
 }
 
-
+// Sort sorts the linkedlist in place in ascending order
 func (l *LinkedList)Sort(){
 	length := l.Len()
 	// keep the head pointer
-	beg := l
+	start := l
 	for i:=0;i<length-1;i++ {
 		// start over from the head
-		l := beg
+		l := start
 		for j:=0;j<length-1-i ;j++{
 			if l.next != nil {
 				if (l.next != nil)  && (l.value > l.next.value) {
 
-					temp := l.value
-					l.value = l.next.value
-					l.next.value = temp
-
+					l.value, l.next.value = l.next.value, l.value
 				}
 				l = l.next
 			}
@@ -95,6 +95,7 @@ func (l *LinkedList)Sort(){
 
 }
 
+// Elem stores nodes' values in an array in order and return it
 func (l *LinkedList)Elem() []int{
 	length := l.Len()
 	temp := make([]int,length)
@@ -104,17 +105,15 @@ func (l *LinkedList)Elem() []int{
 	}
 	return temp
 
-
-
-
 }
 
+// ReverseSort sorts the linkedlist in descending order
 func (l *LinkedList)ReverseSort(){
 	l.Sort()
         temp := l.Elem()
 	length := len(temp)
 	for i:=0;i<length/2;i++ {
-		temp[i],temp[length-i] =  temp[length-i],temp[i]
+		temp[i],temp[length-1-i] =  temp[length-1-i],temp[i]
 
 	}
 
@@ -126,6 +125,7 @@ func (l *LinkedList)ReverseSort(){
 
 }
 
+// Remove deletes the first node which has value num
 func (l *LinkedList)Remove(num int) error{
 
 
@@ -152,6 +152,7 @@ func (l *LinkedList)Remove(num int) error{
 
 }
 
+// clear resets all the nodes' values
 func (l *LinkedList)Clear(){
 	for l!=nil{
 		l.value = 0
@@ -162,15 +163,19 @@ func (l *LinkedList)Clear(){
 
 }
 
+// Add adds a new node with value num to the end of the linkedlist
 func (l *LinkedList)Add(num int){
 	for l.next != nil{
 		l = l.next
 	}
-	new := &LinkedList{num, nil}
-	l.next = new
+	//new := &LinkedList{num, nil}
+	//l.next = new
+	l.next = &LinkedList{num, nil}
 
 }
 
+// Has checks whether linkedlist has node which has value num, return the node itself and true
+// if the node is present
 func (l *LinkedList)Has(num int) (*LinkedList,bool){
 	for l!=nil{
 		if l.value == num{
@@ -184,6 +189,8 @@ func (l *LinkedList)Has(num int) (*LinkedList,bool){
 
 }
 
+// InsertBefore inserts a new node with value num to the first node with value target
+//  and returns the newly added node and error if any
 func  (l *LinkedList)InsertBefore(target, num int) (*LinkedList, error){
 	p, has := l.Has(target)
 	if !has{
@@ -205,6 +212,8 @@ func  (l *LinkedList)InsertBefore(target, num int) (*LinkedList, error){
 
 }
 
+// InsertAfter inserts a new node with value num as the next node after node
+// with value target and returns the newly added node and error if any
 func  (l *LinkedList)InsertAfter(target, num int)(*LinkedList, error){
 	p, has := l.Has(target)
 	if !has {
@@ -221,23 +230,36 @@ func  (l *LinkedList)InsertAfter(target, num int)(*LinkedList, error){
 
 }
 
-func (l *LinkedList)InsertAs(index,num int)(*LinkedList,error) {
-	if index > l.Len() || index <0{
-		return nil, fmt.Errorf("Index:%v out of range\n",index)
+// InsertAs inserts a new node with value num as the node with index idx
+func (l *LinkedList)InsertAs(idx,num int)(*LinkedList,error) {
+	if idx > l.Len() || idx <0{
+		return nil, fmt.Errorf("Index:%v out of range\n",idx)
 	}
-        if index == 0{
+        if idx == 0{
+		// keep original node information
 		originalValue := l.value
 		temp := l.next
 
+		// construct the original node
 		originalHead := &LinkedList{originalValue,temp}
+		// change the current node value to the new value
+		// pointer points to the previous head
+		// we need to generate a new node for the original head
+		// the head node for the new added element
 		l.value = num
 		l.next = originalHead
+		// the following 3 lines of code don't work
+		// I change the l to point to another struct
+		// but it doesn't affect the caller
+		// temp := l
+		// new := &LinkedList{num,temp}
+		// l = new
 		return l, nil
 	}
 
 	for i:=0;l!=nil;i++{
 		// get the previous pointer
-		if i+1 == index{
+		if i+1 == idx{
 			temp :=  l.next
 			l.next = &LinkedList{num,temp}
 			break
@@ -247,7 +269,8 @@ func (l *LinkedList)InsertAs(index,num int)(*LinkedList,error) {
 	return l.next,nil
 }
 
-
+// String returns the string representation of the linkedlist
+// make it satisfy Stringer interface
 func (l *LinkedList)String()string{
 	elements := l.Elem()
 	s :=[]string{}
@@ -296,7 +319,10 @@ func LinkedListInclusive_test(){
 	p.InsertAs(5,-30)
 	p.InsertBefore(777,76)
 	p.InsertAfter(512,13)
-	fmt.Printf("p: %s\n", p)``
+	fmt.Printf("p: %s\n", p)
+
+	p.ReverseSort()
+	fmt.Printf("p: %s\n", p)
 	p.Sort()
 	fmt.Printf("p: %s\n", p)
 	p.Clear()
